@@ -1,48 +1,39 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    serviceOfInterest: "",
-    message: "",
-  })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setSubmitError(false)
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
 
     try {
-      // Simulate form submission - replace with actual Formspree endpoint
-      const response = await fetch("https://formspree.io/f/visionarymindsscholars@gmail.com", {
+      // Replace this URL with your actual Formspree endpoint
+      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID_HERE", {
         method: "POST",
+        body: formData,
         headers: {
-          "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify(formData),
       })
 
       if (response.ok) {
         setIsSubmitted(true)
+        form.reset() // Clear the form
+      } else {
+        setSubmitError(true)
       }
     } catch (error) {
       console.error("Form submission error:", error)
-      // For demo purposes, still show success
-      setIsSubmitted(true)
+      setSubmitError(true)
     } finally {
       setIsSubmitting(false)
     }
@@ -93,18 +84,24 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Contact Form */}
           <div className="order-2 lg:order-1">
+            {submitError && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm">
+                  There was an error sending your message. Please try again or contact us directly.
+                </p>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                   Full Name *
                 </label>
                 <input
                   type="text"
-                  id="fullName"
-                  name="fullName"
+                  id="name"
+                  name="name"
                   required
-                  value={formData.fullName}
-                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                 />
               </div>
@@ -118,8 +115,6 @@ export default function Contact() {
                   id="email"
                   name="email"
                   required
-                  value={formData.email}
-                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                 />
               </div>
@@ -132,22 +127,18 @@ export default function Contact() {
                   type="tel"
                   id="phone"
                   name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                 />
               </div>
 
               <div>
-                <label htmlFor="serviceOfInterest" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="service" className="block text-sm font-medium text-gray-700 mb-2">
                   Service of Interest *
                 </label>
                 <select
-                  id="serviceOfInterest"
-                  name="serviceOfInterest"
+                  id="service"
+                  name="service"
                   required
-                  value={formData.serviceOfInterest}
-                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                 >
                   <option value="">Select a service</option>
@@ -167,8 +158,6 @@ export default function Contact() {
                   name="message"
                   required
                   rows={5}
-                  value={formData.message}
-                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                   placeholder="Tell us about your academic goals and how we can help you..."
                 />
