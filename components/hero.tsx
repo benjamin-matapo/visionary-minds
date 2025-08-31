@@ -37,8 +37,8 @@ export default function Hero() {
           </div>
           <div className="relative order-first lg:order-last">
             <img
-              src="https://images.unsplash.com/photo-1523240798132-8751934af4c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-              alt="Students studying and collaborating in a modern library"
+              src="/classroom-students.jpg"
+              alt="Students engaged in focused study in a modern classroom setting, representing academic excellence and learning"
               className="w-full h-auto rounded-lg shadow-2xl max-w-md mx-auto lg:max-w-none"
             />
           </div>
