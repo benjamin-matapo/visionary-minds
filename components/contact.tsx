@@ -3,71 +3,42 @@
 import { useState } from "react"
 
 export default function Contact() {
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState(false)
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service: "",
+    message: "",
+  })
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitError(false)
-
-    const form = e.currentTarget
-    const formData = new FormData(form)
-
-    try {
-      // Replace this URL with your actual Formspree endpoint
-      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID_HERE", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      })
-
-      if (response.ok) {
-        setIsSubmitted(true)
-        form.reset() // Clear the form
-      } else {
-        setSubmitError(true)
-      }
-    } catch (error) {
-      console.error("Form submission error:", error)
-      setSubmitError(true)
-    } finally {
-      setIsSubmitting(false)
-    }
+    
+    // Create mailto link with form data
+    const subject = encodeURIComponent("Visionary Minds Scholars Contact")
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\n` +
+      `Email: ${formData.email}\n` +
+      `Phone: ${formData.phone || 'Not provided'}\n` +
+      `Service of Interest: ${formData.service}\n\n` +
+      `Message:\n${formData.message}`
+    )
+    
+    const mailtoLink = `mailto:visionarymindsscholars@gmail.com?subject=${subject}&body=${body}`
+    
+    // Open email client
+    window.open(mailtoLink, '_blank')
   }
 
   const whatsappUrl =
     "https://wa.me/260979891359?text=Hello%20Visionary%20Minds%20Scholars%2C%20I%27d%20like%20to%20get%20in%20touch."
-
-  if (isSubmitted) {
-    return (
-      <section id="contact" className="py-12 sm:py-16 lg:py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6 sm:p-8">
-            <div className="text-green-600 text-4xl sm:text-5xl mb-4">✓</div>
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 leading-tight">
-              Thank You for Your Interest!
-            </h3>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              We've received your message and will get back to you within 24 hours.
-            </p>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center bg-green-500 text-white px-4 sm:px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-            >
-              <span className="mr-2">💬</span>
-              Chat with us on WhatsApp
-            </a>
-          </div>
-        </div>
-      </section>
-    )
-  }
 
   return (
     <section id="contact" className="py-12 sm:py-16 lg:py-20 bg-white">
@@ -84,14 +55,6 @@ export default function Contact() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Contact Form */}
           <div className="order-2 lg:order-1">
-            {submitError && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-600 text-sm">
-                  There was an error sending your message. Please try again or contact us directly.
-                </p>
-              </div>
-            )}
-            
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -102,6 +65,8 @@ export default function Contact() {
                   id="name"
                   name="name"
                   required
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                 />
               </div>
@@ -115,6 +80,8 @@ export default function Contact() {
                   id="email"
                   name="email"
                   required
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                 />
               </div>
@@ -127,6 +94,8 @@ export default function Contact() {
                   type="tel"
                   id="phone"
                   name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                 />
               </div>
@@ -139,6 +108,8 @@ export default function Contact() {
                   id="service"
                   name="service"
                   required
+                  value={formData.service}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                 >
                   <option value="">Select a service</option>
@@ -158,6 +129,8 @@ export default function Contact() {
                   name="message"
                   required
                   rows={5}
+                  value={formData.message}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-primary focus:border-transparent text-base"
                   placeholder="Tell us about your academic goals and how we can help you..."
                 />
@@ -165,10 +138,9 @@ export default function Contact() {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-brand-primary text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50 text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                className="w-full bg-brand-primary text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-brand-hover transition-colors text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
-                {isSubmitting ? "Sending..." : "Send Message"}
+                Send Message via Email
               </button>
             </form>
           </div>

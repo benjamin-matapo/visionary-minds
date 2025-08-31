@@ -1,31 +1,4 @@
 export default function About() {
-  const team = [
-    {
-      name: "Michael Chen",
-      role: "Founder & CEO",
-      image: "/professional-asian-businessman.png",
-      bio: "Former admissions officer with 10+ years of experience in Chinese higher education.",
-    },
-    {
-      name: "Sarah Liu",
-      role: "Education Consultant",
-      image: "/team-member-2.png",
-      bio: "Specializes in scholarship applications and has helped 500+ students secure funding.",
-    },
-    {
-      name: "David Wang",
-      role: "Visa Specialist",
-      image: "/professional-asian-consultant.png",
-      bio: "Immigration expert with extensive knowledge of Chinese visa requirements and processes.",
-    },
-    {
-      name: "Emily Zhang",
-      role: "Student Support Manager",
-      image: "/professional-young-asian-woman.png",
-      bio: "Provides ongoing support to students throughout their academic journey in China.",
-    },
-  ]
-
   const stats = [
     { number: "1000+", label: "Students Placed" },
     { number: "95%", label: "Success Rate" },
@@ -76,7 +49,7 @@ export default function About() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-12 sm:mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="text-center p-4 bg-brand-accent rounded-lg">
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-primary mb-2">
@@ -85,29 +58,6 @@ export default function About() {
               <div className="text-sm sm:text-base text-gray-600 font-medium">{stat.label}</div>
             </div>
           ))}
-        </div>
-
-        {/* Team */}
-        <div>
-          <h3 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-8 sm:mb-12">
-            Our Team
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="text-center p-4 bg-gray-50 rounded-lg hover:shadow-lg transition-shadow duration-300">
-                <img
-                  src={member.image || "/placeholder.svg"}
-                  alt={member.name}
-                  className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto mb-4 object-cover shadow-md"
-                />
-                <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 leading-tight">
-                  {member.name}
-                </h4>
-                <p className="text-brand-primary font-medium mb-3 text-sm sm:text-base">{member.role}</p>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{member.bio}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
